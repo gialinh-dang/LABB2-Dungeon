@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LABB2._Dungeon
 {
-     class Rat : Enemy
+     public class Rat : Enemy
     {
         public Rat(int x, int y)
            : base(x, y, 'r', ConsoleColor.DarkRed, "Rat", 10,  // Alla stats för Rat (HP 10, 1d6+3, 1d6+1).

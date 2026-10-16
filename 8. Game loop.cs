@@ -56,6 +56,17 @@ namespace LABB2._Dungeon
             Console.ResetColor();
             Console.CursorVisible = true;
         }
+        private Enemy? FindEnemyNextToPlayer()
+        {
+            foreach (LevelElement element in level.Elements)
+            {
+                if (element is Enemy enemy && enemy.DistanceTo(player) <= 1)
+                {
+                    return enemy;
+                }
+            }
+            return null; 
+        }
         private void UpdateEnemies()
         {
             List<Enemy> enemies = level.Elements.OfType<Enemy>().ToList();
@@ -101,6 +112,7 @@ namespace LABB2._Dungeon
         {
             int row = level.Height + 1;
 
+            // PLAYER STATS
             string hpText = $"HP: {player.HP}/{player.MaxHP}";
             string levelText = $"Level: {player.Level}";
             string attackText = $"Attack: {player.AttackDice}";
@@ -110,8 +122,42 @@ namespace LABB2._Dungeon
             Console.SetCursorPosition(0, row);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"{levelText,-16}{hpText,-19}{attackText,-20}{defenceText,-19}{turnText}");
-            Console.ResetColor();
 
+            //EnemyHP
+            Enemy? enemy = Combat.LastEnemy;
+            bool justFought = enemy != null;
+            
+            if (enemy == null)
+            {
+                enemy = FindEnemyNextToPlayer();
+            }
+            if (enemy != null)
+            {
+                int bars = enemy.HP * 10 / enemy.MaxHP;
+                string hpBar = new string('#', bars) + new string('-', 10 - bars);
+                string enemyText;
+                if (justFought && Combat.EnemyHPBefore != enemy.HP)
+                {
+                    int lost = Combat.EnemyHPBefore - enemy.HP;
+                    enemyText = $"HP: {Combat.EnemyHPBefore} -> {enemy.HP}/{enemy.MaxHP} (-{lost})";
+                }
+                else
+                {
+                    enemyText = $"HP: {enemy.HP}/{enemy.MaxHP}";
+                }
+                if (enemy.HP == 0)
+                {
+                    enemyText += $" [{hpBar}]  DEAD";
+                }
+                else
+                {
+                    enemyText += $"  [{hpBar}]";
+                }
+                Console.SetCursorPosition(0, row + 1);
+                Console.ForegroundColor = enemy.Color;
+                Console.WriteLine($"{enemy.Name,-6}{enemyText}");
+            }
+            Console.ResetColor();
             MessageLog.Draw(row + 2);
         }
 

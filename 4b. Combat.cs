@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LABB2._Dungeon
 {
-    internal static class Combat
+    public static class Combat
     {
         public static Enemy? LastEnemy { get; set;  }
         public static int EnemyHPBefore { get; set; }
