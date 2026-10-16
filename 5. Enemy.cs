@@ -6,15 +6,17 @@ namespace LABB2._Dungeon
 {
     public abstract class Enemy : LevelElement, ICharacter
     {
-        public string Name { get;  }
+        public string Name { get; set;  }
         public int HP { get; set; }
-        public Dice AttackDice { get; }
-        public Dice DefenceDice { get; }
+        public int MaxHP { get; set; }
+        public Dice AttackDice { get; set; }
+        public Dice DefenceDice { get; set; }
         protected Enemy(int x, int y, char symbol, ConsoleColor color, string name, int hp, Dice attackDice, Dice defenceDice)
             : base(x, y, symbol, color)
         {
             Name = name;
             HP = hp;
+            MaxHP = hp;
             AttackDice = attackDice;
             DefenceDice = defenceDice;
         }
